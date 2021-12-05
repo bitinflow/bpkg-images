@@ -1,8 +1,12 @@
-on: push
+on: [push, pull_request]
 name: Build
 jobs:
-  deploy:
-    name: Build Laravel Images
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        runtime: [ laravel:8.0-octane, laravel:8.1-octane ]
+    name: "bpkg.io/${{ matrix.runtime }}"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -16,17 +20,27 @@ jobs:
           registry: bpkg.io
           username: k3s
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build and push bpkg.io/laravel:8.0-octane
+      - name: Build and push bpkg.io/${{ matrix.runtime }}
+        if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./runtimes/laravel:8.0-octane/Dockerfile
+          file: ./runtimes/${{ matrix.runtime }}/Dockerfile
           platforms: |
             linux/amd64
             linux/arm/v7
           push: true
-          build-args: |
-            CICD_GIT_COMMIT=${{ steps.slug.outputs.sha8 }}
           tags: |
-            bpkg.io/laravel:latest
-            bpkg.io/laravel:8.0-octane
+            bpkg.io/${{ matrix.runtime }}
+      - name: Build and push bpkg.io/${{ matrix.runtime }}-develop
+        if: github.ref == 'refs/heads/develop'
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./runtimes/${{ matrix.runtime }}/Dockerfile
+          platforms: |
+            linux/amd64
+            linux/arm/v7
+          push: true
+          tags: |
+            bpkg.io/${{ matrix.runtime }}-develop
