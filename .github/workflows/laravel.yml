@@ -1,0 +1,32 @@
+on: push
+name: Build
+jobs:
+  deploy:
+    name: Build Laravel Images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: bpkg.io
+          username: k3s
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push bpkg.io/laravel:8.0-octane
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./runtimes/laravel:8.0-octane/Dockerfile
+          platforms: |
+            linux/amd64
+            linux/arm/v7
+          push: true
+          build-args: |
+            CICD_GIT_COMMIT=${{ steps.slug.outputs.sha8 }}
+          tags: |
+            bpkg.io/laravel:latest
+            bpkg.io/laravel:8.0-octane
