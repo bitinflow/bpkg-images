@@ -11,6 +11,8 @@ base images for our web projects.
 | bpkg.io/laravel | 8.0-octane-develop | Development build. | amd64, arm64 | no |
 | bpkg.io/laravel | 8.1-octane | PHP image containing all extensions for a laravel octane app. | amd64, arm64 | yes |
 | bpkg.io/laravel | 8.1-octane-develop | Development build. | amd64, arm64 | no |
+| bpkg.io/hello-world | latest | Development build. | amd64, arm64 | no |
+| bpkg.io/hello-world | latest-develop | Development build. | amd64, arm64 | no |
 
 ## Concepts
 
