@@ -29,7 +29,7 @@ jobs:
           file: ./runtimes/${{ matrix.runtime }}/Dockerfile
           platforms: |
             linux/amd64
-            linux/arm
+            linux/arm64/v8
           push: true
           tags: |
             bpkg.io/${{ matrix.runtime }}
