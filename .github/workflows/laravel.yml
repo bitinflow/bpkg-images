@@ -5,7 +5,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runtime: [ "laravel:8.0-octane", "laravel:8.1-octane" ]
+        runtime: [ "hello-world:latest" ]
+        #runtime: [ "hello-world:latest", "laravel:8.0-octane", "laravel:8.1-octane" ]
     name: "bpkg.io/${{ matrix.runtime }}"
     runs-on: ubuntu-latest
     steps:
