@@ -1,7 +1,7 @@
 FROM node:14-alpine AS build
 
 WORKDIR /app
-COPY . /app
+COPY runtimes/hello-world:latest/. /app
 
 RUN set -ex \
   # Build JS-Application
